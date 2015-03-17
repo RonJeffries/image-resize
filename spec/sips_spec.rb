@@ -18,6 +18,11 @@ end
 describe "file manager" do
   before :each do
     @sw = SipsWorker.new('images')
+    puts "Each in #{Dir.entries('images')}"
+    FileUtils.rm_f(Dir.glob('images/*'))
+    puts "empty in #{Dir.entries('images')}"
+    FileUtils.cp_r('images-backup/.', 'images/')
+    puts "reloaded in #{Dir.entries('images')}"
   end
 
   it "should set folder" do
@@ -25,17 +30,19 @@ describe "file manager" do
     expect(@sw.folder).to eq('mumble')
   end
 
-  it "should find files" do
-    expect(@sw.files).to  include('jpeg-file.jpg')
-    expect(@sw.files).to  include('png-file.png')
-    @sw.copy('jpeg-file.jpg', '-medium')
-    expect(@sw.files).to include('jpeg-file-medium.jpg')
-  end
-
   after :each do
+    puts "mediums #{Dir.glob('images/*-medium.*')}"
     Dir.foreach('images') do |f|
       FileUtils.remove_file('images/'+f) if f.include?('-medium.')
       FileUtils.remove_file('images/'+f) if f.include?('-small.')
     end
+    puts "Clean #{Dir.entries('images')}"
+  end
+
+  it "should find files" do
+    expect(@sw.files).to  include('agile-barrier-1024x598.jpg')
+    expect(@sw.files).to  include('planningDetail.png')
+    @sw.copy('agile-barrier-1024x598.jpg', '-medium')
+    expect(@sw.files).to include('agile-barrier-1024x598-medium.jpg')
   end
 end
