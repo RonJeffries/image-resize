@@ -45,4 +45,8 @@ describe "file manager" do
     @sw.copy('agile-barrier-1024x598.jpg', '-medium')
     expect(@sw.files).to include('agile-barrier-1024x598-medium.jpg')
   end
+
+  it "should give me some info" do
+    expect(`sips --getProperty pixelWidth images-backup/planningDetail.png`).to eq("")
+  end
 end
