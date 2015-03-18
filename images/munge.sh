@@ -1,12 +1,12 @@
 #! /bin/bash
-for f in *.png 
+shopt -s nullglob
+rm *-m.*
+for f in *.gif *.jpg *.png
 do
   name=${f%%.*}
   ext=${f#*.}
   new=$name-m.$ext
-  echo "cp $f $new"
-  cp $f $new
-  sips -g pixelWidth -g pixelHeight $new
-  sips --resampleWidth 640 $new
-  sips -g pixelWidth -g pixelHeight $new
+#  sips -g pixelWidth -g pixelHeight $new
+  sips --resampleWidth 640 $f -o $new
+#  sips -g pixelWidth -g pixelHeight $new
 done
